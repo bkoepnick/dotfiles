@@ -3,7 +3,7 @@ syntax on
 colorscheme default
 set tabstop=4
 set shiftwidth=4
-set noexpandtab
+set expandtab
 set ruler
 
 set nocp
