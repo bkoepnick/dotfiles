@@ -84,3 +84,5 @@ export PATH="${PATH:-}:/Users/koepnick/.local/bin"
 # AWS hostname is like ip-10-51-4-4
 export AWS_IP=${HOSTNAME#ip-}
 export AWS_IP=${AWS_IP//-/.}
+
+export GIT_EDITOR="vim"
