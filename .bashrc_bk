@@ -46,6 +46,8 @@ alias join_pdf="/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Ma
 
 alias histogram="histogram.sh"
 
+alias git_ref="git_ref.sh"
+
 function hist() {
 	history| grep "${1}" | tail -n 20
 }
