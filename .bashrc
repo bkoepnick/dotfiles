@@ -25,6 +25,9 @@ export HISTFILESIZE=100000
 
 export PATH=".:/usr/local/bin:/Users/koepnick/scripts/:/Users/koepnick/scripts/bash/:$PATH"
 
+# Python
+export PYTHONPATH=".:/Users/koepnick/scripts/module/:$PYTHONPATH"
+
 #PyMOL
 function pymol() {
 	/Applications/PyMOL.app/Contents/MacOS/PyMOL $@ > /dev/null &
