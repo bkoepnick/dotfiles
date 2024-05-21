@@ -49,6 +49,8 @@ alias join_pdf="/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/Ma
 
 alias histogram="histogram.sh"
 
+alias git_ref="git_ref.sh"
+
 function hist() {
 	history| grep "${1}" | tail -n 20
 }
@@ -83,3 +85,9 @@ export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # flaws
 export PATH="${PATH:-}:/Users/koepnick/.local/bin"
+
+# AWS hostname is like ip-10-51-4-4
+export AWS_IP=${HOSTNAME#ip-}
+export AWS_IP=${AWS_IP//-/.}
+
+export GIT_EDITOR="vim"
