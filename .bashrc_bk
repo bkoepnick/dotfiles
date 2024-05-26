@@ -23,10 +23,10 @@ export HISTFILESIZE=100000
 # Update column and row number after each command to match window size
 #shopt -s checkwinsize
 
-export PATH=".:/usr/local/bin:/Users/koepnick/scripts/:/Users/koepnick/scripts/bash/:$PATH"
+export PATH=".:/usr/local/bin:~/scripts/:~/scripts/bash/:$PATH"
 
 # Python
-export PYTHONPATH=".:/Users/koepnick/scripts/module/:$PYTHONPATH"
+export PYTHONPATH=".:~/scripts/module/:$PYTHONPATH"
 
 #PyMOL
 function pymol() {
@@ -84,7 +84,7 @@ function fetch_mtz() {
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # flaws
-export PATH="${PATH:-}:/Users/koepnick/.local/bin"
+export PATH="${PATH:-}:~/.local/bin"
 
 # AWS hostname is like ip-10-51-4-4
 export AWS_IP=${HOSTNAME#ip-}
