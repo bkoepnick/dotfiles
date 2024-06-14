@@ -22,10 +22,12 @@ cmd.set( 'valence',  0 )
 util.cbc( 'e. C' )
 cmd.disable( 'all' )
 cmd.zoom( 'visible' )
+cmd.set( 'ray_trace_mode', 1 )
 
 if( cmd.get_names() ):
 	cmd.enable( cmd.get_names()[0] )
 
+# set homedir so `fetch` downloads pdbs to .pymol/
 homedir = os.path.expanduser('~')
 if os.getcwd() == homedir:
 	os.chdir( os.path.join( homedir, '.pymol' ) )
