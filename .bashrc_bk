@@ -80,6 +80,8 @@ function fetch_mtz() {
 	curl -O http://www.ebi.ac.uk/pdbe/coordinates/files/${1}_map.mtz	
 }
 
+alias pm='pymol $(pbpaste | tr "\n" " ")'
+
 # suppress silly mac warning about zsh being the default shell
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -91,3 +93,5 @@ export AWS_IP=${HOSTNAME#ip-}
 export AWS_IP=${AWS_IP//-/.}
 
 export GIT_EDITOR="vim"
+
+alias python=/opt/homebrew/bin//python3
