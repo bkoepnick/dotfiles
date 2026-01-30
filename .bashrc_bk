@@ -7,6 +7,12 @@ if [[ $OSTYPE == "darwin"* ]]; then
 
 	# on macOS, prompt with computer name instead of hostname
 	export PS1="[ \d \t $(scutil --get ComputerName):\W ] $ "
+    
+    # Homebrew
+    #eval "$(/opt/homebrew/bin/brew shellenv)"
+    export PATH=".:/opt/homebrew/bin/:$PATH"
+
+    alias python=/opt/homebrew/bin//python3
 
 # if Linux
 elif [[ $OSTYPE == "linux-gnu"* ]]; then
@@ -40,10 +46,6 @@ function pymol() {
 
 # always run coot in this temp directory, so it doesn't leave tmp droppings all over the place
 #alias coot="mkdir -p /Users/koepnick/temp/coot/; cd /Users/koepnick/temp/coot; /usr/local/bin/coot"
-
-# Homebrew
-#eval "$(/opt/homebrew/bin/brew shellenv)"
-export PATH=".:/opt/homebrew/bin/:$PATH"
 
 alias join_pdf="/System/Library/Automator/Combine\ PDF\ Pages.action/Contents/MacOS/join -o"
 
@@ -94,4 +96,3 @@ export AWS_IP=${AWS_IP//-/.}
 
 export GIT_EDITOR="vim"
 
-alias python=/opt/homebrew/bin//python3
