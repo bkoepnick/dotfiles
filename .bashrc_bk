@@ -29,6 +29,7 @@ export PATH=".:/usr/local/bin:~/scripts/:~/scripts/bash/:$PATH"
 export PYTHONPATH=".:~/scripts/module/:$PYTHONPATH"
 
 #PyMOL
+export PATH="/Applications/PyMOL.app/Contents/bin:$PATH"
 function pymol() {
 	/Applications/PyMOL.app/Contents/MacOS/PyMOL $@ > /dev/null &
 }
@@ -86,6 +87,7 @@ alias pm='pymol $(pbpaste | tr "\n" " ")'
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # flaws
+export PATH="$HOME/Library/Python/3.14/bin:$PATH"
 export PATH="${PATH:-}:~/.local/bin"
 
 # AWS hostname is like ip-10-51-4-4
