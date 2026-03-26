@@ -17,6 +17,7 @@
       "Bash(mkdir:*)",
       "Bash(wc:*)",
       "Bash(which:*)",
+      "Bash(jq:*)",
       "Edit(./**)",
       "Read(./**)",
       "Write(./**)"
