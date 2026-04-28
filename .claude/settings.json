@@ -23,5 +23,11 @@
       "Write(./**)"
     ]
   },
-  "model": "opus[1m]"
+  "effortLevel": "medium",
+  "theme": "light",
+  "statusLine": {
+    "enabled": true,
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  }
 }
