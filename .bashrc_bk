@@ -96,5 +96,6 @@ export PATH="${PATH:-}:~/.local/bin"
 export AWS_IP=${HOSTNAME#ip-}
 export AWS_IP=${AWS_IP//-/.}
 
+# git
 export GIT_EDITOR="vim"
-
+git config --global push.autoSetupRemote true # really belongs in .gitconfig...
