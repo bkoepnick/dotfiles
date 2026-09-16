@@ -16,8 +16,14 @@ Baseline for every figure:
 - Grids off by default; turn them on per-axes as `grid(True, axis="y", alpha=0.3, linestyle="--")`
   with `set_axisbelow(True)`.
 - `figure.dpi 110`, `savefig.dpi 200`, `savefig.bbox "tight"`.
-- Two-line titles: what is plotted, then which dataset —
-  `"Cyno vs human estimated KD\nDL047 Sig6 VHH (DPA-614)"`. Subtitle line carries the n.
+- Two-line titles, never three: what is plotted, then which dataset —
+  `"Cyno vs human estimated KD\nDL047 Sig6 VHH (DPA-614)"`.
+  - Line 1 names the quantity plainly and stays short (`"QC pass by plates"`, not
+    `"Secondary picks vs the primary run, gate by gate"`). No editorial framing of the finding.
+  - Line 2 is the dataset and nothing else — no n, no lot counts.
+  - Counts live where they attach to a mark: `n =` above the axes, `k/n` over each bar, and the
+    printed output above the figure. Method notes (test used, CI type, which thin groups were
+    dropped) go in per-axes titles or the print output, never in the suptitle.
 - Legends outside the axes: `fig.legend(..., loc="center left", bbox_to_anchor=(0.97, 0.5))`.
   Legend counts must be over what the figure actually draws, not the parent frame.
 - Save every figure to a figures dir under `output/`, then `plt.show()`.
@@ -40,7 +46,8 @@ Rates and counts:
 - `PercentFormatter` decimals adaptive: `0 if max_rate >= 0.05 else 1`, or a sub-1% panel reads
   "0%" / "1%".
 - Drop groups whose denominator is too small to show anything at the base rate (`MIN_POOL_N`), and
-  name the dropped groups in the subtitle rather than silently omitting them.
+  name the dropped groups rather than silently omitting them — in the per-axes title of the panel
+  they were dropped from, or the print output above the figure. Not the suptitle (see title rules).
 - Annotate `k/n` above every rate bar.
 
 Layout: at talk context labels collide. Rotate or shorten tick labels, put `n =` annotations ABOVE
