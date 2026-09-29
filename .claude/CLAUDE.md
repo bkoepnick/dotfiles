@@ -23,7 +23,20 @@ Baseline for every figure:
   - Counts live where they attach to a mark: `n =` above the axes, `k/n` over each bar, and the
     printed output above the figure. Method notes (test used, CI type, which thin groups were
     dropped) go in the print output or a comment, never crammed into the title.
-- Legends outside the axes: `fig.legend(..., loc="center left", bbox_to_anchor=(0.97, 0.5))`.
+  - Derived statistics (`r = 0.65`, `paired = 46`) belong in the print output too, never the title.
+  - One axes -> `ax.set_title`, not `fig.suptitle`. Reserve the suptitle for figures with more
+    than one axes. Either way the title is two lines: what is plotted, then the dataset.
+  - No explicit `fontsize` on the figure title, suptitle or single-axes axes title alike — the
+    rcParams default is the right size, and overriding it makes titles inconsistent between
+    figures. Per-axes titles in a multi-panel figure are the exception: they keep `fontsize=13`
+    and may carry the panel's `n`, being labels for the panel rather than the figure's title.
+- Leave `fontsize` unset unless there is a reason the default fails. Category tick labels take the
+  default; set a smaller size only where density demands it (20+ cluster labels at `fontsize=8`),
+  not on a 6-category axis. Legends stay at `fontsize=10`. A figure the reader is expected to zoom
+  into and read (a sequence alignment, a distance matrix) sets its own sizes deliberately — those
+  are not defaults to strip.
+- Legends outside the axes: `fig.legend(..., loc="center left", bbox_to_anchor=(1, 0.5))`, flush
+  with the axes edge rather than overlapping it at `0.97`.
   Legend counts must be over what the figure actually draws, not the parent frame.
 - Never write figures to disk (no `savefig`, no `output/figures/`); display them inline with
   `plt.show()` only. This holds for the agent too: do not extract a notebook's rendered PNGs to
@@ -35,7 +48,10 @@ Encoding rules:
   in the scatter, the bar charts and the panel titles).
 - Background/unselected/other is grey (`"0.78"`–`"0.87"`), drawn FIRST and at lower zorder; the
   highlighted set is drawn last. A dense grey layer plotted after the highlights buries them.
-- Highlighted points get a size multiplier (~2.4x) over the backdrop, not a different marker.
+- Highlighted points get a size multiplier of **1.2x** over the backdrop, not a different marker.
+  Started at 2.4x, then 1.5x, and settled on 1.2x: at the larger multipliers the highlighted set
+  crowds and overlaps in dense panels, which costs more than the extra emphasis buys, and colour
+  is already carrying the distinction — the size bump only has to be perceptible.
 - One marker size per role, shared across the scatter and its marginals; one bar width shared by
   an outline bar and the stacked fill drawn inside it, so they register exactly.
 - Never distinguish tiers/subsets by marker shape when colour already does it.
@@ -110,6 +126,27 @@ Wilson score 95% CI and `k/n` annotated, sharing x down each column, y-ranges sh
   concat so heterogeneous columns are kept, not dropped. We rarely know up front which score we'll
   want next, and re-loading to recover a column dropped earlier is wasteful. Narrow only at the
   point of a specific plot/export, never in the shared working frame.
+
+## Assay Controls
+An SPR (or any per-plate assay) analysis opens its analysis section with the controls, before any
+design result. The controls say whether the plate's numbers are worth reading, so they are reported
+first and never folded into the design story.
+
+- Resolve each control's ROLE from the registry (`get_control(...).control_metadata["control_role"]`),
+  never from the well position — a re-plated layout silently relabels a well. Report the roles by
+  what they certify, not by "positive"/"negative": a binding-target positive certifies the binding
+  readout (its KD should reproduce plate to plate); a modality positive certifies expression and
+  chip capture, so "captured, does not bind" is its PASS, not a failure.
+- Controls live in their own sidecar CSV beside the merged table, not as rows in the working frame.
+  A control has no design record, so appending it nulls every design column and drops non-designs
+  into every hit-rate denominator.
+- Distinguish the three ways a control has no KD, and never collapse them: **not run** (never
+  reached the chip — purification only), **NB** (run, called a non-binder), and **no fit** (called a
+  binder, but the 1:1 model would not fit). Pegging a "no fit" at the NB sentinel reads as "did not
+  bind", the opposite of the call — leave it off the KD plot and report it in the print output.
+- Report per-plate reproducibility, not a pooled number: binder calls made / plates run, 1:1 fits
+  obtained, and the KD range across plates, per antigen arm. Name the plates where a control was
+  not run. A control that drifts or goes missing on one plate is exactly what the section is for.
 
 ## S3 Outputs
 Everything an analysis writes to S3 goes under **`s3://xaira-inflight/analysis/binder_design/`**,
