@@ -96,6 +96,13 @@ Per-cluster hit composition. One subplot row per epitope/group, each with its ow
 clusters holding a hit of that group (clusters are rarely nested inside the group), shared y.
 - Open black-outline bar = everything tested in that cluster (the denominator); stacked fill inside
   it = hits split by framework; same `BAR_W` for both.
+- The outline is drawn ON TOP of the coloured stack (stack `zorder=2`, outline `zorder=3`), so the
+  denominator's black box reads as one continuous rectangle instead of being clipped wherever a
+  filled segment covers its edge.
+- Linear y, never log: a stack is drawn from a `bottom`, and on a log axis a one-hit segment
+  starting at 1 has zero height and disappears.
+- Drop groups with too few hits to compose anything (`MIN_EPI_HITS`), and name them with their hit
+  counts in the print output — a row for a group with one hit is a wasted panel.
 - Label the hit total above each stack: tested runs 10-100x the hits, so the stack is a sliver.
 - x labels are the composite key, sorted by its parts — see the id-scoping rule below.
 
@@ -176,11 +183,10 @@ extract code cells from both with `jq -r '.cells[]|select(.cell_type=="code")|.s
 `diff` them, and fold the user's edits back into the generator until the diff is empty. Never edit
 the notebook and the generator independently.
 
-After editing, execute the notebook with `jupyter nbconvert --to notebook --execute --inplace` —
-an edited notebook is not done until it has run. Check the emitted cells parse (`ast.parse` over the
-code cells) first, so a syntax error costs a second rather than a full run.
-- After executing, check `jq '[.cells[].outputs[]?|select(.output_type=="error")]|length'` AND the
-  file size — nbconvert can fail without the error reaching a piped tail, leaving an unexecuted file.
+**Never run `jupyter nbconvert --execute`.** Stop once the cells are verified and the notebook is
+written; the user executes it themselves, interactively. Check the emitted cells parse (`ast.parse`
+over the code cells) and hand back the unexecuted .ipynb. When the code needs exercising before
+handoff, run it as a plain script against the cached inputs — never by executing the notebook.
 - Never do a bare global string replace on an identifier (`axes[1].` -> `ax_tm.`); scope it to the
   cell. Same for removing a line: take the leading whitespace with it or the next line gets swallowed.
 - Kernel is python 3.11: f-strings cannot reuse the outer quote character inside the expression
