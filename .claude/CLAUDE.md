@@ -170,16 +170,6 @@ first and never folded into the design story.
   obtained, and the KD range across plates, per antigen arm. Name the plates where a control was
   not run. A control that drifts or goes missing on one plate is exactly what the section is for.
 
-## S3 Outputs
-Everything an analysis writes to S3 goes under **`s3://xaira-inflight/analysis/binder_design/`**,
-in a directory mirroring the repo path of the analysis that produced it, e.g. the notebook in
-`analysis/binder_design/mrgprx2/260911_jz33_redesign/` writes to
-`s3://xaira-inflight/analysis/binder_design/mrgprx2/260911_jz33_redesign/`. Never invent a new
-top-level prefix (`design/xseq/...`, `results/...`) and never scatter one notebook's outputs across
-several directories — the cached frame, its sidecar and the handoff CSV all land in the same place.
-Bind the directory once as `S3_DIR` and build every path from it, so moving the whole set is a
-one-line edit. Name files `<YYMMDD>_<campaign>_<what>.csv`.
-
 ## Notebook Structure
 A long analysis notebook opens with a **data loading + write-to-S3 step**, kept separate from
 everything below it: it reads from CAD/the catalog, builds the merged frame, and caches it to S3
