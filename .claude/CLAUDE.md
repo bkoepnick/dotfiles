@@ -6,13 +6,17 @@ Never use `python3 -c` to read or validate .ipynb files. Instead, use `cat` or `
 
 ## Notebook Verbosity
 Writeups belong in the notebook header cell only. Every other markdown cell is a bare section
-heading (`## 4. Breakdown ...`, `### Hits per cluster`) with no prose. Print output is terse —
-labels and numbers, never full sentences (`print(f"on the plane {len(plane):,}   rankable {len(both):,}")`).
+heading (`## Breakdown by arm`, `### Hits per cluster`) with no prose — and NOT numbered: no
+`## 1.`, `## 2.` prefixes, since sections get reordered and inserted and the numbers rot.
+Print output is terse — labels and numbers, never full sentences (`print(f"on the plane {len(plane):,}   rankable {len(both):,}")`).
 Explanations that matter go in code comments, where they sit next to the thing they explain.
 
 ## Plotting Style
 Baseline for every figure:
-- `sns.set_context("talk")`, `sns.set_palette("colorblind")`; white figure and axes faces.
+- `sns.set_context("talk")` and `sns.set_palette("colorblind")` together, always, in the setup
+  cell of every notebook — they are a pair, never one without the other. (Note the two different
+  calls: "colorblind" is a PALETTE, so it goes to `set_palette`; `set_context` only takes
+  paper/notebook/talk/poster.) White figure and axes faces.
 - Grids off by default; turn them on per-axes as `grid(True, axis="y", alpha=0.3, linestyle="--")`
   with `set_axisbelow(True)`.
 - `figure.dpi 110`.
@@ -26,6 +30,17 @@ Baseline for every figure:
   - Derived statistics (`r = 0.65`, `paired = 46`) belong in the print output too, never the title.
   - One axes -> `ax.set_title`, not `fig.suptitle`. Reserve the suptitle for figures with more
     than one axes. Either way the title is two lines: what is plotted, then the dataset.
+  - **A figure with a suptitle uses `layout="constrained"`, never `fig.subplots_adjust`.** At talk
+    context `figure.titlesize` is 21.6pt, so a two-line suptitle is ~71px deep, while the default
+    `figure.subplot.top = 0.88` leaves ~79px for it AND the per-axes titles. `subplots_adjust`
+    sets only what it is handed and disables the engine that would have made room, so the
+    suptitle lands on top of the `fontsize=13` axes titles. Set spacing through the engine
+    instead: `fig.get_layout_engine().set(wspace=0.08)` (its `wspace` is a fraction of axes
+    width, not the `subplots_adjust` scale). The single-axes case hides this — `ax.set_title`
+    sits inside the axes band and never collides — so it only bites on multi-panel figures,
+    which is exactly where the house style asks for a suptitle plus wider `wspace`.
+    Verify rather than assume: after `fig.canvas.draw()`, compare
+    `fig._suptitle.get_window_extent(r)` against each `ax.title.get_window_extent(r)`.
   - No explicit `fontsize` on the figure title, suptitle or single-axes axes title alike — the
     rcParams default is the right size, and overriding it makes titles inconsistent between
     figures. Per-axes titles in a multi-panel figure are the exception: they keep `fontsize=13`
